@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../app/generated/prisma"
@@ -12,4 +9,225 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  organizations OrganizationMember[]
+  invites       Invite[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  plan        Plan     @default(FREE)
+  stripeCustomerId String? @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members    OrganizationMember[]
+  sites      Site[]
+  vehicles   Vehicle[]
+  materials  Material[]
+  consumptions Consumption[]
+  expenses   Expense[]
+  invites    Invite[]
+}
+
+model OrganizationMember {
+  id             String       @id @default(cuid())
+  organizationId String
+  userId         String
+  role           MemberRole   @default(MEMBER)
+  createdAt      DateTime     @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+}
+
+model Invite {
+  id             String   @id @default(cuid())
+  organizationId String
+  email          String
+  role           MemberRole @default(MEMBER)
+  invitedById    String
+  accepted       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invitedBy      User         @relation(fields: [invitedById], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, email])
+}
+
+model Site {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  location       String?
+  description    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  materials      Material[]
+  consumptions   Consumption[]
+  expenses       Expense[]
+}
+
+model Vehicle {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  type           VehicleType
+  registration   String?
+  capacity       Float?
+  fuelType       FuelType?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  expenses       Expense[]
+}
+
+model Material {
+  id             String   @id @default(cuid())
+  organizationId String
+  siteId         String?
+  name           String
+  category       String
+  unit           String
+  currentStock   Float    @default(0)
+  minStock       Float    @default(0)
+  price          Float?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  site           Site?        @relation(fields: [siteId], references: [id], onDelete: SetNull)
+  consumptions   Consumption[]
+}
+
+model Consumption {
+  id             String   @id @default(cuid())
+  organizationId String
+  materialId     String
+  siteId         String?
+  quantity       Float
+  date           DateTime
+  notes          String?
+  createdAt      DateTime @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  material       Material     @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  site           Site?        @relation(fields: [siteId], references: [id], onDelete: SetNull)
+}
+
+model Expense {
+  id             String        @id @default(cuid())
+  organizationId String
+  siteId         String?
+  vehicleId      String?
+  category       ExpenseCategory
+  amount         Float
+  date           DateTime
+  description    String?
+  receipt        String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  site           Site?         @relation(fields: [siteId], references: [id], onDelete: SetNull)
+  vehicle        Vehicle?      @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum MemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum Plan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+enum VehicleType {
+  TRUCK
+  EXCAVATOR
+  BULLDOZER
+  CRANE
+  OTHER
+}
+
+enum FuelType {
+  DIESEL
+  PETROL
+  ELECTRIC
+  HYBRID
+}
+
+enum ExpenseCategory {
+  MATERIALS
+  LABOR
+  EQUIPMENT
+  FUEL
+  MAINTENANCE
+  RENTAL
+  OTHER
 }
