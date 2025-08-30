@@ -10,17 +10,17 @@ import {
   TrendingUp,
   AlertTriangle,
   Plus,
-  Users,
+  
   Activity,
-  ArrowUpRight,
-  ArrowDownRight,
+  
+  
   Eye,
   Download,
   Edit,
   Trash2,
   Search,
   Filter,
-  Calendar,
+  
   MapPin
 } from 'lucide-react'
 
@@ -78,7 +78,7 @@ export default function DashboardPage() {
   const userName = session?.user?.name || 'Demo User'
 
   // Mock data
-  const [sites, setSites] = useState<Site[]>([
+  const [sites, _setSites] = useState<Site[]>([
     {
       id: '1',
       name: 'Downtown Project',
@@ -117,7 +117,7 @@ export default function DashboardPage() {
     }
   ])
 
-  const [materials, setMaterials] = useState<Material[]>([
+  const [materials, _setMaterials] = useState<Material[]>([
     {
       id: '1',
       name: 'Cement',
@@ -160,7 +160,7 @@ export default function DashboardPage() {
     }
   ])
 
-  const [expenses, setExpenses] = useState<Expense[]>([
+  const [expenses, _setExpenses] = useState<Expense[]>([
     {
       id: '1',
       description: 'Cement purchase for Downtown Project',
@@ -190,7 +190,7 @@ export default function DashboardPage() {
     }
   ])
 
-  const [vehicles, setVehicles] = useState<Vehicle[]>([
+  const [vehicles, _setVehicles] = useState<Vehicle[]>([
     {
       id: '1',
       name: 'Excavator JCB-01',
@@ -226,7 +226,7 @@ export default function DashboardPage() {
 
   const totalBudget = sites.reduce((sum, site) => sum + site.budget, 0)
   const totalSpent = sites.reduce((sum, site) => sum + site.spent, 0)
-  const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0)
+  const _totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0)
   const criticalMaterials = materials.filter(m => m.status === 'critical')
   const warningMaterials = materials.filter(m => m.status === 'warning')
 

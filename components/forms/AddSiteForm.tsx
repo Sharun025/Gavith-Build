@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { X, MapPin, Calendar, User, DollarSign, Building2, Phone, Mail, Globe } from 'lucide-react'
+import { X, MapPin, Calendar, User, DollarSign, Building2,   Globe } from 'lucide-react'
 
 interface AddSiteFormProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (siteData: any) => void
+  onSubmit: (siteData: Record<string, unknown>) => void
 }
 
 export default function AddSiteForm({ isOpen, onClose, onSubmit }: AddSiteFormProps) {
@@ -530,7 +530,7 @@ export default function AddSiteForm({ isOpen, onClose, onSubmit }: AddSiteFormPr
                 onChange={handleChange}
                 rows={4}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter project description, scope, and any additional details..."
+                placeholder="Enter project description, scope, and Record<string, unknown> additional details..."
               />
             </div>
           </div>
