@@ -72,8 +72,6 @@ export default function DashboardPage() {
   const { data: session } = useSession()
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('overview')
-  const [showAddModal, setShowAddModal] = useState(false)
-  const [modalType, setModalType] = useState<'site' | 'material' | 'expense' | 'vehicle'>('site')
   const [searchTerm, setSearchTerm] = useState('')
   const userName = session?.user?.name || 'Demo User'
 
@@ -275,7 +273,7 @@ export default function DashboardPage() {
               <button 
                 onClick={() => {
                   setModalType('site')
-                  setShowAddModal(true)
+                  setShowAddSiteForm(true)
                 }}
                 className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
@@ -525,7 +523,7 @@ export default function DashboardPage() {
                   <button 
                     onClick={() => {
                       setModalType('site')
-                      setShowAddModal(true)
+                      setShowAddSiteForm(true)
                     }}
                     className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                   >
@@ -617,7 +615,7 @@ export default function DashboardPage() {
                   <button 
                     onClick={() => {
                       setModalType('material')
-                      setShowAddModal(true)
+                      setShowAddSiteForm(true)
                     }}
                     className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                   >
@@ -695,7 +693,7 @@ export default function DashboardPage() {
                   <button 
                     onClick={() => {
                       setModalType('expense')
-                      setShowAddModal(true)
+                      setShowAddSiteForm(true)
                     }}
                     className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                   >
@@ -769,7 +767,7 @@ export default function DashboardPage() {
                   <button 
                     onClick={() => {
                       setModalType('vehicle')
-                      setShowAddModal(true)
+                      setShowAddSiteForm(true)
                     }}
                     className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                   >
@@ -826,78 +824,6 @@ export default function DashboardPage() {
       </div>
 
       {/* Add Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div className="mt-3">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Add {modalType.charAt(0).toUpperCase() + modalType.slice(1)}
-              </h3>
-              <div className="space-y-4">
-                {modalType === 'site' && (
-                  <>
-                    <input type="text" placeholder="Site Name" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-                    <input type="text" placeholder="Location" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-                    <input type="text" placeholder="Manager" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-                    <input type="number" placeholder="Budget" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-                  </>
-                )}
-                {modalType === 'material' && (
-                  <>
-                    <input type="text" placeholder="Material Name" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-                    <input type="text" placeholder="Unit" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-                    <input type="number" placeholder="Initial Quantity" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-                  </>
-                )}
-                {modalType === 'expense' && (
-                  <>
-                    <input type="text" placeholder="Description" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-md">
-                      <option>Select Site</option>
-                      {sites.map(site => <option key={site.id}>{site.name}</option>)}
-                    </select>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-md">
-                      <option>Select Category</option>
-                      <option>Materials</option>
-                      <option>Labor</option>
-                      <option>Equipment</option>
-                      <option>Other</option>
-                    </select>
-                    <input type="number" placeholder="Amount" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-                  </>
-                )}
-                {modalType === 'vehicle' && (
-                  <>
-                    <input type="text" placeholder="Vehicle Name" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-md">
-                      <option>Select Type</option>
-                      <option>Excavator</option>
-                      <option>Crane</option>
-                      <option>Bulldozer</option>
-                      <option>Truck</option>
-                    </select>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-md">
-                      <option>Select Site</option>
-                      {sites.map(site => <option key={site.id}>{site.name}</option>)}
-                    </select>
-                  </>
-                )}
-              </div>
-              <div className="flex justify-end space-x-3 mt-6">
-                <button
-                  onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
-                >
-                  Cancel
-                </button>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                  Add {modalType.charAt(0).toUpperCase() + modalType.slice(1)}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
