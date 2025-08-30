@@ -272,7 +272,7 @@ export default function DashboardPage() {
             <div className="flex items-center space-x-3 mt-4 sm:mt-0">
               <button 
                 onClick={() => {
-                  setModalType('site')
+                  
                   setShowAddSiteForm(true)
                 }}
                 className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -522,7 +522,7 @@ export default function DashboardPage() {
                   </div>
                   <button 
                     onClick={() => {
-                      setModalType('site')
+                      
                       setShowAddSiteForm(true)
                     }}
                     className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
@@ -614,7 +614,7 @@ export default function DashboardPage() {
                   </div>
                   <button 
                     onClick={() => {
-                      setModalType('material')
+                      
                       setShowAddSiteForm(true)
                     }}
                     className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
@@ -692,7 +692,7 @@ export default function DashboardPage() {
                   </div>
                   <button 
                     onClick={() => {
-                      setModalType('expense')
+                      
                       setShowAddSiteForm(true)
                     }}
                     className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
@@ -766,7 +766,7 @@ export default function DashboardPage() {
                   </div>
                   <button 
                     onClick={() => {
-                      setModalType('vehicle')
+                      
                       setShowAddSiteForm(true)
                     }}
                     className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
