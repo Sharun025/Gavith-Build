@@ -73,6 +73,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('overview')
   const [searchTerm, setSearchTerm] = useState('')
+  const [showAddSiteForm, setShowAddSiteForm] = useState(false)
   const userName = session?.user?.name || 'Demo User'
 
   // Mock data
